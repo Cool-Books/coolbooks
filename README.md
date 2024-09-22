@@ -14,7 +14,9 @@ git checkout -b <your_name>
 
 - you make sure to always push from your branch, do not push to the main branch
 - For every push, always make sure to update your README with the latest feature made. eg
-** Landing page: Completed
+```
+Landing page: Completed
+```
 
 ## AUTHORS
 This project is written by:

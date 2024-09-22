@@ -11,6 +11,10 @@ git clone git@github.com:Cool-Books/coolbooks.git
 ```
 git checkout -b <your_name>
 ```
+- to see what branch you are currently on, run the command:
+```
+git branch
+```
 
 - you make sure to always push from your branch, do not push to the main branch
 - For every push, always make sure to update your README with the latest feature made. eg

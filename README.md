@@ -1,5 +1,5 @@
-### COOLBOOKS
-# Auths Models Views
+# COOLBOOKS
+#### Auths Models Views
 
 ## Project startup
 - clone this repo

@@ -24,8 +24,8 @@ Landing page: Completed
 
 ## AUTHORS
 This project is written by:
-- Mojibola Olalekan [email](lekanmojibola@gmail.com)
-- Levi Soromto [email](soromtolevi1@gmail.com)
+- **Mojibola Olalekan** [email](lekanmojibola@gmail.com)
+- **Levi Soromto** [email](soromtolevi1@gmail.com)
 
 ## License
 This project is under Mit license.

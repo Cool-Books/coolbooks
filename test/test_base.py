@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """test"""
-from datetime import datetime
+from datetime import date, datetime
 import unittest
 import uuid
 import json
 from os import path
+from parameterized import parameterized
 from unittest.mock import mock_open, patch
 from models.base import Base, DATA, TIMESTAMP
 
@@ -21,7 +22,7 @@ class TestingBase(unittest.TestCase):
         global book
         global t_class
         DATA = {}
-        book = Books(id=1, created_at="2024-09-23T05-47-37",
+        book = Books(id='1', created_at="2024-09-23T05-47-37",
                              updated_at="2024-09-23T05-47-37", _password='abcd')
         t_class = book.__class__.__name__
 
@@ -80,8 +81,8 @@ class TestingBase(unittest.TestCase):
         book_id = book.id
 
         # Test if the book instance is correctly saved
-        self.assertIn(1, mock_dict.get(t_class))
-        self.assertEqual(book_id, 1)
+        self.assertIn('1', mock_dict.get(t_class))
+        self.assertEqual(book_id, '1')
         self.assertNotEqual(get_created_at, datetime.strftime(book.updated_at, TIMESTAMP))
         self.assertNotEqual(get_updated_at, datetime.strftime(book.updated_at, TIMESTAMP))
 
@@ -95,7 +96,7 @@ class TestingBase(unittest.TestCase):
         mock_fopen.assert_called_once_with('.db_{}.json'.format(t_class), 'w')
 
         # --------- mock expected data to be saved into file ----------
-        expected_data = {1: book.to_json(True)}
+        expected_data = {'1': book.to_json(True)}
 
         # --------- assert that the expected data is saved into file -----------
         mock_dump.assert_called_once_with(expected_data, mock_fopen())
@@ -119,5 +120,40 @@ class TestingBase(unittest.TestCase):
         mock_exist.assert_called_once_with('.db_Books.json')
         mock_fopen.assert_called_once_with('.db_Books.json', 'r')
         mock_load.assert_called_once_with(mock_fopen())
+        
+        # --------- check if objects are loaded back into dictionary for use --------
         self.assertIn(t_class, mock_dict)
-        self.assertEqual(mock_dict[t_class][1], book)
+        self.assertEqual(mock_dict[t_class]['1'], book)
+    
+    @parameterized.expand([
+        ("id=1", []),  # testing with different type
+        ({'id': '1'}, None), # testing with id
+        # testing with not formatted created_at
+        ({'created_at': "2024-09-23T05-47-37"}, []),
+        # testing with formatted created_at
+        ({'created_at': datetime.strptime("2024-09-23T05-47-37", TIMESTAMP)}, None),
+        ({'id': '1', 'created_at': datetime.strptime("2024-09-23T05-47-37", TIMESTAMP)}, None), # testing with two keys
+        ({}, None) # empty dictionary should return all instances
+    ])
+    @patch('models.base.DATA', new_callable=dict)
+    def test_search(self, attr, value, mock_dict):
+        """mocking and testing the search method"""
+        mock_dict[t_class] = {}
+        book.save()
+        if value is None:
+            value = [book]
+        self.assertEqual(Books.search(attr), value)
+    
+    @parameterized.expand([
+        ("1", True),
+        ("2", None),
+        ("", None)
+    ])
+    @patch('models.base.DATA', new_callable=dict)
+    def test_get(self, key, val, mock_dict):
+        """mocking and testing get method"""
+        mock_dict[t_class] = {}
+        book.save()
+        if val == True:
+            val = book
+        self.assertEqual(Books.get(key), val)

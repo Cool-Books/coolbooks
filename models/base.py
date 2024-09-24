@@ -3,7 +3,7 @@
 from os import path
 import uuid
 from datetime import datetime
-from typing import TypeVar
+from typing import TypeVar, List, Type
 import json
 
 TIMESTAMP = "%Y-%m-%dT%H-%M-%S"
@@ -80,12 +80,28 @@ class Base:
             for obj_id, val in obj.items():
                 DATA[t_class][obj_id] = cls(**val)
 
-
+    @classmethod
+    def search(cls, attr: dict = {}) -> List[Type['Base']]:
+        """returns the list of instances
+        based on unique key"""
+        t_class = cls.__name__
+        if not isinstance(attr, dict):
+            return []
+        def _search(obj):
+            """for filter"""
+            if len(attr) == 0:
+                return True
+            for key, val in attr.items():
+                if getattr(obj, key) != val:
+                    return False
+                return True
+        return list(filter(_search, DATA[t_class].values()))
+        
     def remove(self):
         pass
 
-    def get(self):
-        pass
-
-    def search(self):
-        pass
+    @classmethod
+    def get(cls, id: str) -> TypeVar('Base'):
+        """return an object by id"""
+        t_class = cls.__name__
+        return DATA[t_class].get(id)

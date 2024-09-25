@@ -8,7 +8,7 @@
 - *search*
 - *get*
 
-**test_base** in ```test/test_base```:
+**test_base** in ```test/test_base.py```:
 - *test for init*
 - *test for eq*
 - *test for save*
@@ -16,3 +16,14 @@
 - *test for load_from_file*
 - *test for search*
 - *test for get*
+
+**User** in ```models/user.py
+- *email setter and getter*
+- *first name and last name setter and getter*
+- *bio setter and getter*
+- *is author*
+
+**test_user** in ```test/test_user.py```
+- *test for email*
+- *test for first name and last name*
+- *test for bio*

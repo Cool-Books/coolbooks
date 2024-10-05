@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """user model"""
-from multiprocessing import Value
 import re
-from models.base import Base
+import unittest
+from models.base import Base, DATA
 import bcrypt
 
 
@@ -10,13 +10,13 @@ class User(Base):
     """user model"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._email = kwargs.get("email")
+        self.email = kwargs.get("email")
         self._password = kwargs.get('password')
-        self._bio = kwargs.get('bio')
-        self._first_name = kwargs.get('first_name')
-        self._last_name = kwargs.get('last_name')
+        self.bio = kwargs.get('bio')
+        self.first_name = kwargs.get('first_name')
+        self.last_name = kwargs.get('last_name')
         self.other_names = kwargs.get('other_names')
-        self._is_author = kwargs.get('is_author', "NO")
+        self.is_author = kwargs.get('is_author', "NO")
     
     
     @property
@@ -27,7 +27,7 @@ class User(Base):
     @password.setter
     def password(self, pwd: str) -> None:
         """setting the password: defining constraints"""
-        if pwd is None or not isinstance(pwd, str):
+        if pwd is None or not isinstance(pwd, str) or not pwd:
             self._password = None
         else:
             self.validate_pwd(pwd)        
@@ -35,7 +35,7 @@ class User(Base):
 
     def is_valid_pwd(self, pwd: str) -> True:
         """check the validity of the password"""
-        if pwd is None or not isinstance(pwd, str):
+        if pwd is None or not isinstance(pwd, str) or not pwd:
             return False
         return bcrypt.checkpw(pwd.encode('utf-8'), self.password)
 
@@ -48,7 +48,7 @@ class User(Base):
     @bio.setter
     def bio(self, in_bio: str) -> None:
         """setter for bio"""
-        if in_bio is None or not isinstance(in_bio, str):
+        if in_bio is None or not isinstance(in_bio, str) or not in_bio:
             self._bio = None
         else:
             self.validate_bio(in_bio)
@@ -125,7 +125,7 @@ class User(Base):
     @staticmethod
     def validate_name(name: str) -> bool:
         """validate first name"""
-        if name is None:
+        if name is None or not name:
             raise ValueError("Name must not be empty")        
         if not isinstance(name, str):
             raise ValueError("Invalid name")
@@ -138,13 +138,13 @@ class User(Base):
     @staticmethod
     def validate_email(mail: str) -> bool:
         """validate mail"""
-        if mail is None:
+        if mail is None or not mail:
             raise ValueError("Email cannot be empty")
         if '@' not in mail or mail.count('@') != 1 or not isinstance(mail, str):
             raise ValueError("Email is invalid")
         pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         if not re.match(pattern, mail):
             raise ValueError("Email is invalid")
-        if len(mail) > 250:
+        if len(mail) > 100:
             raise ValueError("Email too long")
         return True

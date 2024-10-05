@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Base class for all models"""
 from os import path
+from re import T
 import uuid
+import os
 from datetime import datetime
-from typing import TypeVar, List, Type
+from typing import TypeVar, List, Type, Iterable
 import json
 
 TIMESTAMP = "%Y-%m-%dT%H-%M-%S"
@@ -34,11 +36,12 @@ class Base:
             return False
         return (self.id == other.id)
     
+    
     def to_json(self, for_serialization: bool = False) -> dict:
         """converting the instance object to json"""
         result = {}
         for key, value in self.__dict__.items():
-            if not for_serialization and key[0] == '_':
+            if not for_serialization and key == '_password':
                 continue
             if type(value) is datetime:
                 result[key] = datetime.strftime(value, TIMESTAMP)
@@ -48,11 +51,12 @@ class Base:
 
 
     def save(self):
-        """saving current instance object to DATA"""
+        """Saving current instance object to DATA"""
         t_class = self.__class__.__name__
         self.updated_at = datetime.now()
         DATA[t_class][self.id] = self
-        self.__class__.save_to_file()
+        self.__class__.save_to_file()  # Saving to file is enough; don't clear DATA here.
+        # DATA.clear()  # Remove this line unless you need to clear it.
 
 
     @classmethod
@@ -64,21 +68,47 @@ class Base:
         for key, val in DATA[t_class].items():
             t_obj[key] = val.to_json(True)
         
-        with open(file_path, 'w') as f:
+        with open(file_path, 'w+') as f:  # 'a+' mode allows both reading and appending
+            f.seek(0, os.SEEK_END)  # Move to the end of the file
+            if f.tell() > 0:  # If file is not empty, check if last character is a newline
+                f.seek(f.tell() - 1, os.SEEK_SET)  # Go back one character
+                if f.read(1) != '\n':  # Check if last character is not a newline
+                    f.write('\n')  # If it's not a newline, add one
+                
+            # Append the new JSON data
             json.dump(t_obj, f)
-
+            f.write('\n')  # Add a newline after the appended data
 
     @classmethod
     def load_from_file(cls):
+        """Load model objects from file, processing each JSON object line by line."""
         t_class = cls.__name__
         file_path = ".db_{}.json".format(t_class)
         DATA[t_class] = {}
-        if not path.exists(file_path):
+
+        # Check if file exists
+        if not os.path.exists(file_path):
             return
+        
+        # Open the file and process each line as a separate JSON object
         with open(file_path, 'r') as f:
-            obj = json.load(f)
-            for obj_id, val in obj.items():
-                DATA[t_class][obj_id] = cls(**val)
+            for line in f:
+                line = line.strip()  # Remove any extra whitespace or newlines
+                if line:  # Make sure the line isn't empty
+                    obj = json.loads(line)  # Parse the JSON data
+                    for obj_id, val in obj.items():
+                        # Create a new dictionary to hold the transformed key-value pairs
+                        transformed_val = {}
+                        for key, value in val.items():
+                            if key.startswith('_'):
+                                # Remove the underscore and add it to the new dict
+                                new_key = key[1:]  # Strip the leading underscore
+                                transformed_val[new_key] = value
+                            else:
+                                transformed_val[key] = value
+                        
+                        # Initialize the class instance with the transformed values
+                        DATA[t_class][obj_id] = cls(**transformed_val)
 
     @classmethod
     def search(cls, attr: dict = {}) -> List[Type['Base']]:
@@ -86,7 +116,7 @@ class Base:
         based on unique key"""
         t_class = cls.__name__
         if not isinstance(attr, dict):
-            return []
+            return None
         def _search(obj):
             """for filter"""
             if len(attr) == 0:
@@ -96,12 +126,37 @@ class Base:
                     return False
                 return True
         return list(filter(_search, DATA[t_class].values()))
-        
+    
     def remove(self):
-        pass
+        """Remove object from DATA and save to file"""
+        self.load_from_file()  # Ensure this doesn't interfere with DATA if already loaded
+        s_class = self.__class__.__name__
+        if DATA[s_class].get(self.id) is not None:
+            del DATA[s_class][self.id]  # Delete the entry with self.id
+            self.__class__.save_to_file()  # Save the updated DATA to the file
+            return True
+        return False
+
 
     @classmethod
     def get(cls, id: str) -> TypeVar('Base'):
         """return an object by id"""
         t_class = cls.__name__
         return DATA[t_class].get(id)
+
+    @classmethod
+    def all(cls) -> Iterable[TypeVar('Base')]:
+        """get all instances from storage"""
+        return cls.search()
+
+
+    def update(self, attr: dict) -> TypeVar('Base'):
+        """update the instance in database"""
+        if attr is None or not isinstance(attr, dict):
+            raise ValueError('Invalid request')
+        for key, val in attr.items():
+            if hasattr(self, key):
+                setattr(self, key, val)
+            else:
+                raise ValueError("Invalid request")
+        self.save()

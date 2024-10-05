@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 """testing user model"""
+from multiprocessing import Value
 import unittest
+from unittest.mock import patch
 from parameterized import parameterized
 from models.user import User
+from models.base import DATA
 
 
 class TestingUser(unittest.TestCase):
     """testing user model"""
     def setUp(self):
         """before all tests"""
-        self.user = User(first_name='Olalekan', last_name="Mojibola", email='mojibola0534')
-    
+        self.user = User(first_name='Olalekan', last_name="Mojibola", email='lekanmojibola@gmail.com')
+        self.t_class = self.user.__class__.__name__
+
     @parameterized.expand([
         ("abcd", "Password must be at least 8 characters"),
         ("abcdefgh", "Password must contain at least one uppercase letter"),
@@ -99,7 +103,7 @@ class TestingUser(unittest.TestCase):
         ({},),  # invalid email
         ('email too long',)  # email too long
     ])
-    def test_email(self, email):
+    def test_valid_email(self, email):
         """testing emails"""
         if email == 'lekanmojibola@gmail.com':
             self.user.email = email
@@ -117,3 +121,12 @@ class TestingUser(unittest.TestCase):
             with self.assertRaises(ValueError) as context:
                 self.user.email = email
                 self.assertEqual(str(context.exception), "Email is invalid")
+
+    @patch('models.base.DATA', new_callable=dict)
+    def test_attr_exists(self, mock_dict):
+        """testing if email exists"""
+        mock_dict[self.t_class] = {}
+        self.user.save()
+        self.assertIn(self.user.id, mock_dict[self.t_class])
+        self.assertEqual(mock_dict[self.t_class][self.user.id], self.user)
+

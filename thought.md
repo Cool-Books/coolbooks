@@ -23,7 +23,15 @@ pattern of password must be:
 - is author (yes/no)
 
 
-
+### BOOKS
+- title of books - enforced
+- Authors of the book - enforced
+- short description - optional
+- year of publication - optional
+- edition - optional
+- ISBN (uuid.uuid4) - optional
+- Content - enforced
+- Genre - optional
     
 
 

@@ -27,3 +27,22 @@
 - *test for email*
 - *test for first name and last name*
 - *test for bio*
+
+**Books** in ```models/books.py```
+- *title setter and getter*
+- *author setter and getter*
+- *content setter and getter*
+- *description setter and getter*
+- *isbn getter and setter*
+- *edition getter and setter*
+- *year of publish getter and setter*
+- *delete a book*
+
+**test_book** in ```test/test_book.py```
+
+**endpoints**
+- */all_books* in ```api/v1/views/index.py```
+- */all_books/<isbn>: GET* in ```api/v1/views/books.py```
+- */post_book: POST* in ```api/v1/views/books.py```
+- */all_books/<isbn>: DELETE* in ```api/v1/views/books.py```
+- */all_books/<isbn>: PATCH* in ```api/v1/views/books.py```

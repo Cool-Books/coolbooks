@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -11,15 +11,11 @@ def handle_value_error(error):
         'Message': str(error),
     }), 400  # 400 Bad Request (or any other status code you prefer)
 
-@app.route('/')
+@app.route('/', methods=['POST'])
 def test_error():
-    return jsonify({'success': 'book success'})
-
-def ret_error():
-    get_err()
-def get_err():
-    raise ValueError('This is an error')
+    data = request.get_json()
+    data['id'] = '1234567'
+    return jsonify(data)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
-    
+    app.run(debug=True)

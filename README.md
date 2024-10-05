@@ -37,6 +37,7 @@
 - *edition getter and setter*
 - *year of publish getter and setter*
 - *delete a book*
+- *how many times a book has been read*
 
 **test_book** in ```test/test_book.py```
 

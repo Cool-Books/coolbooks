@@ -12,25 +12,19 @@ def get_a_book(isbn: str):
     get_book = Books.search({'isbn': isbn})[0]
     if get_book is None or not get_book:
         abort(404)
+    get_book.incr_time_called()
     return jsonify(Books.get(get_book.id).to_json())
 
 @app_views.route('/post_book', strict_slashes=False, methods=['POST'])
 def post_a_book():
     """allows for posting a book"""
-    title = request.form.get('title')
-    author = request.form.get('author')
-    isbn = request.form.get('isbn')
-    year_of_publish = request.form.get('year_of_publish')
-    edition = request.form.get('edition')
-    genre = request.form.get('genre')
-    description = request.form.get('description')
-    content = request.form.get('content')
-    kwargs = {'title': title, 'author': author, 'isbn': isbn, 'year_of_publish': year_of_publish,
-              'edition': edition, 'genre': genre, 'description': description, 'content': content,
-              }
+    kwargs = request.get_json()
+    # ----------- to be implemented later -------------
+    # kwargs.id = request.current_user.id
+    # ---------- end ---------------
     book = Books(**kwargs)
     book.save()
-    return jsonify({'Success': f'{title} successfully addded!'})
+    return jsonify({'Success': f'{book.title} successfully addded!'})
 
 @app_views.route('/all_books/<isbn>', strict_slashes=False, methods=['DELETE'])
 def del_book(isbn):
@@ -47,4 +41,4 @@ def update_book(isbn: str) -> str:
     book = book[0]
     data = request.get_json()
     book.update(data)
-    return jsonify({'Sucess': f"{book.title} updated successfully"})
+    return jsonify({'Success': f"{book.title} updated successfully"})

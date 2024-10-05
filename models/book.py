@@ -23,11 +23,18 @@ class Books(Base):
         self.genre = kwargs.get('genre')
         self.description = kwargs.get('description')  # Use setter
         self.content = kwargs.get('content')  # Use setter
+        self.time_called = kwargs.get('time_called', 0)
 
     @property
     def author(self) -> str:
         """returns author"""
         return self._author
+    
+    def incr_time_called(self):
+        """this method increments how many times a book
+        has been called"""
+        self.time_called += 1
+        self.save()
     
     @author.setter
     def author(self, auth: str):

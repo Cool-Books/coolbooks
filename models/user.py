@@ -11,7 +11,7 @@ class User(Base):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.email = kwargs.get("email")
-        self._password = kwargs.get('password')
+        self.password = kwargs.get('password')
         self.bio = kwargs.get('bio')
         self.first_name = kwargs.get('first_name')
         self.last_name = kwargs.get('last_name')
@@ -36,7 +36,7 @@ class User(Base):
     def is_valid_pwd(self, pwd: str) -> True:
         """check the validity of the password"""
         if pwd is None or not isinstance(pwd, str) or not pwd:
-            return False
+            raise ValueError('Incorrect password')
         return bcrypt.checkpw(pwd.encode('utf-8'), self.password)
 
     @property
@@ -103,7 +103,7 @@ class User(Base):
     def is_author(self, author: str) -> None:
         """sets author"""
         if author is None:
-            self.is_author = "NO"
+            self._is_author = "NO"
         else:
             author = author.upper()
             self._is_author = author
@@ -129,8 +129,10 @@ class User(Base):
             raise ValueError("Name must not be empty")        
         if not isinstance(name, str):
             raise ValueError("Invalid name")
-        if re.search(r'[0-9]', name) or re.search(r'[!@#$%^&*(),.?":{}|<>]', name):
-            raise ValueError("Invalid name")
+        if re.search(r'[0-9]', name):
+            raise ValueError("Name cannot contain numbers")
+        if re.search(r'[!@#$%^&*(),.?":{}|<>]', name):
+            raise ValueError("Name cannot contain special characters")
         if len(name) > 50:
             raise ValueError("Name too long")
         return True

@@ -160,3 +160,12 @@ class Base:
             else:
                 raise ValueError("Invalid request")
         self.save()
+
+    @classmethod
+    def _delete_all(cls):
+        """deletes all instances from the file storage"""
+        cls.load_from_file()
+        t_class = cls.__name__
+        if t_class in DATA:
+            DATA[t_class].clear()
+        cls.save_to_file()

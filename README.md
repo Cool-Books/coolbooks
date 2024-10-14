@@ -1,4 +1,4 @@
-### Completed
+#            Completed
 **Base Model** in ```models/base.py```:
 - *to_json*
 - *__eq__*
@@ -7,6 +7,9 @@
 - *load_from_file*
 - *search*
 - *get*
+- *update*
+- *_delete_all*
+
 
 **test_base** in ```test/test_base.py```:
 - *test for init*
@@ -42,8 +45,41 @@
 **test_book** in ```test/test_book.py```
 
 **endpoints**
-- */all_books* in ```api/v1/views/index.py```
+*Note: all endpoints have the base url as /coolbooks*
+### Books
+- */all_books* GET in ```api/v1/views/index.py```
 - */all_books/<isbn>: GET* in ```api/v1/views/books.py```
 - */post_book: POST* in ```api/v1/views/books.py```
 - */all_books/<isbn>: DELETE* in ```api/v1/views/books.py```
 - */all_books/<isbn>: PATCH* in ```api/v1/views/books.py```
+- */all/books/<isbn>: PATCH* in ```api/v1/views/books.py```
+
+### Users
+- */signup: POST* in ```api/v1/views/index.py```
+- */login: POST* in ```api/v1/views/index.py```
+- *forgot_pwd: POST* in ```api/v1/views/index.py```
+- */logout: GET* in ```api/v1/views/index.py```
+- */reset_pwd: POST* in ```api/v1/views/index.py```  (still working on this)
+- */users: GET* in ```api/v1/views/users.py```
+- */users/<id>: GET* in ```api/v1/views/users.py```
+- */users/<id>: DELETE* in ```api/v1/views/users.py```
+- */users/<id>: PATCH* in ```api/v1/views/users.py```
+
+
+## To get started
+- ```pip install -r requirements.txt```
+
+- Then start the server:
+```python3 -m api.v1.app```
+
+- signup
+- login
+- get a book (if there are books already in db)
+- post a book (and you have certain extra roles on the book like delete, update)
+- if you forget your password (access the forgot_pwd endpoint and parse your email and reset link will be sent)
+- then you'll be redirected to reset_pwd endpoint (i am still working on this by the way)
+
+
+- You can now make request to the endpoints via curl or better still using vscode rest client
+
+Happy coding!

@@ -1,41 +1,41 @@
 #!/usr/bin/env python3
 """book model"""
 from datetime import datetime
-from multiprocessing import Value
 import uuid
 import random
 from models.base import Base
 from models.user import User
 
-TIMESTAMP = "%Y-%m-%dT%H-%M-%S"
 
 
 class Books(Base):
     """model for all books"""
 
     def __init__(self, *args, **kwargs):
+        self.is_loading = kwargs.get('is_loading', False)
         super().__init__(*args, **kwargs)
-        self.title = kwargs.get('title')  # Use setter
-        self.author = kwargs.get('author')  # Use setter
-        self.isbn = kwargs.get('isbn')  # Use setter
-        self.year_of_publish = kwargs.get('year_of_publish')  # Use setter
+        self.title = kwargs.get('title')
+        self.author = kwargs.get('author')
+        self.isbn = kwargs.get('isbn')
+        self.published_date = kwargs.get('published_date')
         self.edition = kwargs.get('edition')
         self.genre = kwargs.get('genre')
-        self.description = kwargs.get('description')  # Use setter
-        self.content = kwargs.get('content')  # Use setter
+        self.description = kwargs.get('description')
+        self.content = kwargs.get('content')
         self.time_called = kwargs.get('time_called', 0)
+        self.user_id = kwargs.get('user_id')
 
     @property
     def author(self) -> str:
         """returns author"""
         return self._author
-    
+
     def incr_time_called(self):
         """this method increments how many times a book
         has been called"""
         self.time_called += 1
         self.save()
-    
+
     @author.setter
     def author(self, auth: str):
         """sets the author"""
@@ -53,28 +53,29 @@ class Books(Base):
         if get_isbn is None or not get_isbn:
             self._isbn = self.generate_isbn10()
         else:
-            self.is_valid_isbn10(get_isbn)
-            if Books.search({'isbn': get_isbn}):
-                raise ValueError('Book with the same ISBN exists')
+            if not self.is_loading:
+                self.is_valid_isbn10(get_isbn)
+                if Books.search({'isbn': get_isbn}):
+                    raise ValueError('Book with the same ISBN exists')
             self._isbn = get_isbn
 
     @property
-    def year_of_publish(self):
+    def published_date(self):
         """return year of publish"""
-        return self._year_of_publish
+        return self._published_date
 
-    @year_of_publish.setter
-    def year_of_publish(self, year):
+    @published_date.setter
+    def published_date(self, year):
         if year is None:
-            self._year_of_publish = self.created_at
+            self._published_date = datetime.now().year
         else:
-            self._year_of_publish = datetime.strptime(year, TIMESTAMP)
+            self._published_date = year
 
     @property
     def description(self) -> str:
         """returns description"""
         return self._description
-    
+
     @description.setter
     def description(self, desc: str):
         if desc is None or not desc:
@@ -91,7 +92,7 @@ class Books(Base):
     def title(self) -> str:
         """returns title"""
         return self._title
-    
+
     @title.setter
     def title(self, get_title: str):
         """sets title"""
@@ -103,7 +104,7 @@ class Books(Base):
     def content(self) -> str:
         """return content"""
         return self._content
-    
+
     @content.setter
     def content(self, cont: str):
         """sets content"""
@@ -116,31 +117,31 @@ class Books(Base):
     @staticmethod
     def generate_isbn10() -> str:
         """Generate a valid ISBN-10"""
-        # Generate first 9 random digits
+
         isbn_digits = [random.randint(0, 9) for _ in range(9)]
 
-        # Calculate checksum (the 10th digit)
+
         checksum = sum((i + 1) * digit for i, digit in enumerate(isbn_digits)) % 11
         if checksum == 10:
             checksum = 'X'
 
-        # Join digits and checksum into a full ISBN-10 string
+
         return ''.join(map(str, isbn_digits)) + str(checksum)
-    
+
     @staticmethod
     def is_valid_isbn10(isbn: str) -> bool:
         """Validate an ISBN-10"""
         if len(isbn) != 10:
             raise ValueError('Invalid ISBN provided')
-        
-        # Calculate checksum
+
+
         total = 0
         for i in range(9):
             if not isbn[i].isdigit():
                 raise ValueError('Invalid ISBN provided')
             total += (i + 1) * int(isbn[i])
-        
-        # Handle checksum character
+
+
         checksum = isbn[-1]
         if checksum == 'X':
             total += 10 * 10
@@ -148,26 +149,26 @@ class Books(Base):
             total += 10 * int(checksum)
         else:
             raise ValueError('Invalid ISBN provided')
-        
-        # ISBN-10 is valid if the total modulo 11 is 0
+
+
         return total % 11 == 0
-    
+
     @classmethod
     def delete_a_book(cls, isbn: str):
         """Delete a book from the database."""
         if isbn is None or not isbn or not isinstance(isbn, str):
             raise ValueError('Invalid request')
 
-        # Search for the book by ISBN
+
         get_book_for_delete = Books.search({'isbn': isbn})
-        
+
         if not get_book_for_delete:
             raise ValueError('Book not found')
 
-        # Get the first book found
+
         book_to_delete = get_book_for_delete[0]
-        
-        # Extract the book's title for return
+
+
         book_title = book_to_delete.title
 
         if book_to_delete.remove():

@@ -4,11 +4,14 @@ import re
 import unittest
 from models.base import Base, DATA
 import bcrypt
+import base64
+
 
 
 class User(Base):
     """user model"""
     def __init__(self, *args, **kwargs):
+        self.is_loading = kwargs.get('is_loading', False)
         super().__init__(*args, **kwargs)
         self.email = kwargs.get("email")
         self.password = kwargs.get('password')
@@ -27,16 +30,18 @@ class User(Base):
     @password.setter
     def password(self, pwd: str) -> None:
         """setting the password: defining constraints"""
-        if pwd is None or not isinstance(pwd, str) or not pwd:
-            self._password = None
+        if not self.is_loading:
+            self.validate_pwd(pwd)     
+            hashed_pwd = bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())
+            self._password = base64.b64encode(hashed_pwd).decode('utf-8')
         else:
-            self.validate_pwd(pwd)        
-            self._password = bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())
+            self._password = pwd
 
     def is_valid_pwd(self, pwd: str) -> True:
         """check the validity of the password"""
         if pwd is None or not isinstance(pwd, str) or not pwd:
             raise ValueError('Incorrect password')
+        self.password = base64.b64decode(self.password)
         return bcrypt.checkpw(pwd.encode('utf-8'), self.password)
 
     @property
@@ -112,6 +117,8 @@ class User(Base):
     @staticmethod
     def validate_pwd(pwd: str) -> bool:
         """validate the password"""
+        if pwd is None or not isinstance(pwd, str):
+            raise ValueError('Invalid password')
         if len(pwd) < 8:
             raise ValueError("Password must be at least 8 characters")
         if not re.search(r'[A-Z]', pwd):
@@ -131,7 +138,7 @@ class User(Base):
             raise ValueError("Invalid name")
         if re.search(r'[0-9]', name):
             raise ValueError("Name cannot contain numbers")
-        if re.search(r'[!@#$%^&*(),.?":{}|<>]', name):
+        if re.search(r'[!@#$%^&*(),?":{}|<>]', name):
             raise ValueError("Name cannot contain special characters")
         if len(name) > 50:
             raise ValueError("Name too long")

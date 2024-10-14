@@ -120,7 +120,7 @@ def reset_pwd():
 
     try:
         data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
-        email = data.get('email')
+        email = data.get('reset_password')
     except jwt.ExpiredSignatureError:
         return jsonify({'Error': 'Token has expired'}), 400
     except jwt.InvalidTokenError:

@@ -31,18 +31,21 @@ class User(Base):
     def password(self, pwd: str) -> None:
         """setting the password: defining constraints"""
         if not self.is_loading:
-            self.validate_pwd(pwd)     
+            self.validate_pwd(pwd)
             hashed_pwd = bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())
-            self._password = base64.b64encode(hashed_pwd).decode('utf-8')
+            self._password = hashed_pwd.decode('utf-8')  # Store directly without base64 encoding
         else:
             self._password = pwd
 
-    def is_valid_pwd(self, pwd: str) -> True:
+
+    def is_valid_pwd(self, pwd: str) -> bool:
         """check the validity of the password"""
         if pwd is None or not isinstance(pwd, str) or not pwd:
             raise ValueError('Incorrect password')
-        self.password = base64.b64decode(self.password)
-        return bcrypt.checkpw(pwd.encode('utf-8'), self.password)
+        
+        # Assuming `self._password` is the stored hashed password (without base64 encoding)
+        return bcrypt.checkpw(pwd.encode('utf-8'), self.password.encode('utf-8'))
+
 
     @property
     def bio(self) -> str:

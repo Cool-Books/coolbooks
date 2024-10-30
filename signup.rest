@@ -1,0 +1,11 @@
+POST http://localhost:5000/netflix/signup
+Content-Type: application/json
+
+{
+    "first_name": "Olalekan",
+    "last_name": "Mojibola",
+    "email": "lekanmojibola@gmail.com",
+    "password": "Moji@0534",
+    "password_confirm": "Moji@0534",
+    "user_name": "kingQun"
+}

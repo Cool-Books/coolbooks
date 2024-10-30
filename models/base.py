@@ -3,19 +3,24 @@
 from os import path
 import uuid
 import os
+from dotenv import load_dotenv
 from datetime import datetime
 from typing import TypeVar, List, Type, Iterable
 import json
 
 
+load_dotenv()
+
+DB_TYPE = os.getenv('DB_TYPE')  # for later use
+
 TIMESTAMP = "%Y-%m-%dT%H-%M-%S"
 DATA = {}  
-class Base:
+class BaseModel:
     """base class for all models"""
     def __init__(self, *args: list, **kwargs: dict) -> None:
         t_class = str(self.__class__.__name__)
         if DATA.get(t_class) is None:
-            DATA[t_class] = {}  
+            DATA[t_class] = {} 
         self.id = kwargs.get('id', str(uuid.uuid4()))
         if kwargs.get('created_at') is not None:
             self.created_at = datetime.strptime(kwargs.get('created_at'), TIMESTAMP)
@@ -39,22 +44,28 @@ class Base:
     def to_json(self, for_serialization: bool = False) -> dict:
         """converting the instance object to json"""
         result = {}
-        for key, value in self.__dict__.items():
-            if not for_serialization and key == '_password':
-                continue
-            if type(value) is datetime:
-                result[key] = datetime.strftime(value, TIMESTAMP)
-            else:
-                result[key] = value
+        if DB_TYPE == 'db':
+            pass
+        else:
+            for key, value in self.__dict__.items():
+                if not for_serialization and key == '_password':
+                    continue
+                if type(value) is datetime:
+                    result[key] = datetime.strftime(value, TIMESTAMP)
+                else:
+                    result[key] = value
         return result
 
 
     def save(self):
         """Saving current instance object to DATA"""
-        t_class = self.__class__.__name__
-        self.updated_at = datetime.now()
-        DATA[t_class][self.id] = self
-        self.__class__.save_to_file()
+        if DB_TYPE == 'db':
+            pass
+        else:
+            t_class = self.__class__.__name__
+            self.updated_at = datetime.now()
+            DATA[t_class][self.id] = self
+            self.__class__.save_to_file()
 
 
     @classmethod
@@ -111,19 +122,22 @@ class Base:
     def search(cls, attr: dict = {}) -> List[Type['Base']]:
         """returns the list of instances
         based on unique key"""
-        t_class = cls.__name__
-        cls.load_from_file()
-        if not isinstance(attr, dict):
-            return None
-        def _search(obj):
-            """for filter"""
-            if len(attr) == 0:
-                return True
-            for key, val in attr.items():
-                if getattr(obj, key) != val:
-                    return False
-                return True
-        return list(filter(_search, DATA[t_class].values()))
+        if DB_TYPE == 'db':
+            pass
+        else:
+            t_class = cls.__name__
+            cls.load_from_file()
+            if not isinstance(attr, dict):
+                return None
+            def _search(obj):
+                """for filter"""
+                if len(attr) == 0:
+                    return True
+                for key, val in attr.items():
+                    if getattr(obj, key) != val:
+                        return False
+                    return True
+            return list(filter(_search, DATA[t_class].values()))
 
     def remove(self):
         """Remove object from DATA and save to file"""
@@ -139,31 +153,41 @@ class Base:
     @classmethod
     def get(cls, id: str) -> TypeVar('Base'):
         """return an object by id"""
+        cls.load_from_file()
         t_class = cls.__name__
         return DATA[t_class].get(id)
 
     @classmethod
     def all(cls) -> Iterable[TypeVar('Base')]:
         """get all instances from storage"""
-        return cls.search()
+        if DB_TYPE == 'db':
+            pass
+        else:
+            return cls.search()
 
 
     def update(self, attr: dict):
         """update the instance in database"""
-        if attr is None or not isinstance(attr, dict):
-            raise ValueError('Invalid request')
-        for key, val in attr.items():
-            if hasattr(self, key):
-                setattr(self, key, val)
-            else:
-                raise ValueError("Invalid request")
+        if DB_TYPE == 'db':
+            pass
+        else:
+            if attr is None or not isinstance(attr, dict):
+                raise ValueError('Invalid request')
+            for key, val in attr.items():
+                if hasattr(self, key):
+                    setattr(self, key, val)
+                else:
+                    raise ValueError("Invalid request")
         self.save()
 
     @classmethod
     def _delete_all(cls):
         """deletes all instances from the file storage"""
-        cls.load_from_file()
-        t_class = cls.__name__
-        if t_class in DATA:
-            DATA[t_class].clear()
-        cls.save_to_file()
+        if DB_TYPE == 'db':
+            pass
+        else:
+            cls.load_from_file()
+            t_class = cls.__name__
+            if t_class in DATA:
+                DATA[t_class] = {}
+            cls.save_to_file()

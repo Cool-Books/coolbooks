@@ -1,0 +1,104 @@
+.social-auth {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.left,
+.right {
+    margin-top: 10px;
+}
+
+.auth-link {
+    margin-right: 5px;
+}
+
+.social-icon {
+    margin-right: 12px;
+    padding: 10px;
+    /* Adjust padding as needed */
+    border: 2px solid deeppink;
+    /* Border color */
+    border-radius: 50%;
+    /* Circle shape */
+    width: 35px;
+    /* Adjust width */
+    height: 35px;
+    /* Adjust height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: deeppink;
+    /* Icon color */
+    font-size: 22px;
+    /* Icon size */
+    transition: color 0.3s ease;
+    /* Removes underline */
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+    text-decoration: none;
+    border: 2px solid rgb(196, 172, 39);
+    color: gold;
+    /* Slightly enlarges on hover */
+}
+
+
+html {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgba(10, 10, 10, 0.867);
+    font-family: Avenir-Roman, sans-serif;
+}
+
+.logo {
+    max-width: 360px;
+    cursor: pointer;
+    height: auto;
+}
+
+.social-icons a img:hover {
+    transform: scale(1.1);
+    /* Slightly enlarge the icon on hover */
+    background-color: yellow;
+    /* Yellow background on hover */
+}
+
+/* Custom styles to remove underline and set colors */
+.auth-link {
+    color: rgb(227, 220, 220);
+    /* Default color */
+    text-decoration: none;
+    /* Remove underline */
+    transition: color 0.3s ease;
+}
+
+.auth-link:hover {
+    color: yellow;
+    text-decoration: none;
+    /* Change color on hover */
+}
+
+.social-media {
+    display: flex;
+    justify-content: flex-start;
+    /* Aligns icons to the left */
+}
+
+@media (max-width: 768px) {
+    .logo {
+        width: 250px;
+    }
+    .left {
+        margin-left: -9px;
+    }
+    .right {
+        padding-top: 5px;
+        margin-right: -10px;
+    }
+
+}

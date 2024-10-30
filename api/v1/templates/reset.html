@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-Us">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoolBooks</title>
+    <link href="../static/styles/reset.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body style="background-color: rgba(10, 10, 10, 0.867);">
+    <div class="container-fluid">
+        <div class="social-auth">
+            <!-- social media section -->
+            <div class="s-media">
+                <div class="social-media">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <!-- Auth section -->
+            <div class="auth-l">
+                <a href="signup.html" class="auth-link mr-1"><b>SIGN UP</b></a>
+                <a href="#login" class="auth-link"><b>LOGIN</b></a>
+            </div>
+        </div>
+
+        <!-- Logo Section -->
+        <div class="row justify-content-center mt-5">
+            <div class="col text-center">
+
+                <a href="landingpage.html"><img src="../static/images/logo.png" alt="Logo" class="logo"></a>
+            </div>
+        </div>
+
+        <!-- Centering the card -->
+        <div class="row justify-content-center mt-5 mb-4"  id="for-card">
+            <div class="col-md-4"> <!-- Adjust column width if needed -->
+                <div class="card text-center" style="background-color: rgba(45, 42, 44, 0.867); color: white;">
+                    <div class="card-header h5 text-white" style="background-color: rgb(50, 205, 71);">Password
+                        Reset
+                    </div>
+                    <div class="card-body px-5">
+                        <form id="reset-password-form">
+                            <div data-mdb-input-init class="form-outline" id="pwd">
+                                <label class="text-left">New password</label>
+                                <input type="password" id="new_password" name="new_password" class="form-control my-1"
+                                    placeholder="Enter your password" required />
+                                <div id="pwd-req"><b>Password must be at least 8 characters and must contain at least one
+                                        uppercase, one digit, and one special character</b></div>
+                            </div>
+                            <div data-mdb-input-init class="form2" id="pwd">
+                                <label class="text-left">Confirm password</label>
+                                <input type="password" id="new_password_confirm" name="new_password_confirm"
+                                    class="form-control my-1" placeholder="Confirm your password" required />
+                                <div class="match"></div>
+                            </div>
+                            <!-- Hidden input field to store the token -->
+                            <input type="hidden" id="token" name="token" value="">
+                            <button type="submit" class="btn btn-primary w-100 mt-3" id="reset-btn">Reset password</button>
+                        </form>
+                        <div class="d-flex justify-content-between mt-4">
+                            <a class="" href="login.html">Login</a>
+                            <a class="" href="signup.html">Register</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/scripts/reset.js"></script>
+</body>
+</html>

@@ -1,0 +1,463 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+nav {
+    margin-bottom: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgba(10, 10, 10, 0.867);
+    font-family: 'Source Sans Pro', sans-serif;
+    transition: scroll 0.3s ease;
+}
+
+.nav-brand span {
+    color: deeppink;
+    transition: color 0.3s ease;
+}
+
+.nav-brand span:hover {
+    cursor: pointer;
+    color: gold;
+}
+
+.nav-brand {
+    margin-top: -5px;
+    font-size: 30px;
+}
+
+.mynavbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+}
+
+
+#cool:hover {
+    text-decoration: none;
+}
+
+.nav-items {
+    display: flex;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    position: relative;
+    /* Needed for positioning the dropdown */
+}
+
+.nav-link:hover {
+    color: gold;
+}
+
+.dropdown {
+    position: relative;
+    margin-left: 15px;
+    /* Positioning for the dropdown */
+}
+
+
+.dropdown-content {
+    display: none;
+    /* Hide by default */
+    position: absolute;
+    /* Position relative to the dropdown */
+    background-color: inherit;
+    /* Background color of dropdown */
+    min-width: 150px;
+    /* Minimum width for dropdown */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Shadow effect */
+    z-index: 1;
+    /* Layering */
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    /* Show on hover */
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 10px;
+    font-family: 'Source Sans Pro', sans-serif;
+    text-decoration: none;
+    display: block;
+}
+
+.search-icon {
+    color: blue;
+    font-size: 20px;
+    transition: color 0.3s ease;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: black;
+    height: 99%;
+    width: 23px;
+    border-radius: 3px;
+
+}
+
+.search-icon i {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    font-size: 15px;
+    transform: translate(-15%, -15%);
+}
+
+.search-icon:hover {
+    color: gold;
+    cursor: pointer;
+    background-color: rgb(49, 43, 43);
+}
+
+.searchbar {
+    position: relative;
+}
+
+#searchInput {
+    border: 0;
+    padding: 0 0px;
+    width: 0px;
+    height: 22px;
+    border-radius: 3px;
+}
+
+.right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.grav {
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    margin-right: 50px;
+    position: relative;
+}
+
+.grav:hover,
+#fallbackIcon:hover {
+    cursor: pointer;
+}
+
+
+#fallbackIcon {
+    font-size: 25px;
+    margin-right: 50px;
+    color: blueviolet;
+}
+
+.welcome {
+    width: 100vw;
+    /* Full viewport width */
+    height: 340px;
+    /* Moderate height */
+    object-fit: cover;
+    /* Ensures image scales without white space */
+    margin: 0;
+    /* Remove any margin around the image */
+    padding: 0;
+}
+
+/* Trending container to hold the entire row */
+/* Styling the main trending container */
+.trending-container {
+    position: relative;
+    width: 100vw;
+    display: flex;
+    padding: 20px 20px;
+    flex-direction: column;
+    align-items: center;
+    background-color: deeppink;
+    overflow: hidden;
+    /* Hides overflow */
+}
+
+.trending-container h4 {
+    color: tran;
+    font-size: 30px;
+    transition: color 0.3s ease;
+}
+
+.book-cover:hover {
+    cursor: pointer;
+}
+
+.trending-container h4:hover {
+    color: rgb(82, 76, 44);
+}
+
+/* Gradient overlay for the left and right sides */
+.trending-container::before,
+.trending-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 50px;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    /* Allows clicks to pass through */
+}
+
+.trending-container::before {
+    left: 0;
+    background-image: linear-gradient(90deg, black, transparent);
+}
+
+.trending-container::after {
+    right: 0;
+    background-image: linear-gradient(-90deg, black, transparent);
+}
+
+/* Button container and button styling */
+.icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: lightgreen;
+    background-color: black;
+    border: none;
+    outline: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 2;
+    /* Above the gradient overlays */
+    padding: 8px 12px;
+}
+
+#left-icon {
+    left: 10px;
+    /* Positions the left button */
+}
+
+#right-icon {
+    right: 10px;
+    /* Positions the right button */
+}
+
+/* Trending row styling (the container for book covers) */
+.trends-cover {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    /* Hides the scroll bar */
+}
+
+.trending-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    padding: 20px;
+    padding-left: 0;
+    position: relative;
+    width: 100%;
+}
+
+/* Hide scrollbar */
+.trending-row::-webkit-scrollbar {
+    display: none;
+}
+
+.trending-row {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* Individual book cover styling */
+.book-cover {
+    width: 250px;
+    height: 230px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.genre-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.genre-container h4 {
+    color: white;
+}
+
+.genre-container h4:hover {
+    color: gold;
+}
+
+.just-genre {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5px;
+}
+
+.genre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 35px;
+    text-align: center;
+}
+
+.genre-icon {
+    width: 10rem;
+    height: 10rem;
+    /* Adjust size as needed */
+    margin-bottom: 0px;
+}
+
+.genre p {
+    margin-top: 0;
+    font-size: 14px;
+}
+
+#fantansy p {
+    color: rgb(27, 165, 211);
+}
+
+#romance p {
+    color: deeppink;
+}
+
+#best p {
+    color: white;
+}
+
+#scifi p {
+    color: yellow;
+}
+
+#fict p {
+    color: gold;
+}
+
+
+@media (max-width: 768px) {
+    .trending-container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    /* Navbar and logo adjustments */
+    .nav-brand {
+        text-align: center;
+        font-size: 20px;
+    }
+
+    #genre-get {
+        display: none;
+    }
+
+    #more {
+        margin-left: -3px;
+    }
+
+    .grav {
+        width: 18px;
+        height: 18px;
+    }
+
+    #searchInput {
+        width: 100px;
+    }
+
+    .nav-items {
+        align-items: center;
+        width: 100%;
+    }
+
+    .dropdown-content a {
+        font-size: 16px;
+        padding: 8px;
+    }
+
+
+
+    /* Trending title and container adjustments */
+
+
+    /* Adjustments for trending row and book covers */
+    .trending-row {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .book-cover {
+        width: 130px;
+        height: 180px;
+    }
+
+    /* Genre container adjustments */
+    .genre {
+        margin: 15px;
+    }
+
+    .genre-icon {
+        width: 7rem;
+        height: 7rem;
+    }
+}
+
+
+.profile-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Profile dropdown content styling */
+.profile-dropdown-content {
+    display: none;
+    position: absolute;
+    padding-top: 10px;
+    background-color: none;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    right: 0;
+    /* Align dropdown to the right */
+    z-index: 1;
+}
+
+.profile-dropdown-content a {
+    color: white;
+    padding: 10px;
+    height: auto;
+    text-decoration: none;
+    display: block;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.profile-dropdown-content a:hover,
+.dropdown-content a:hover {
+    background-color: rgb(21, 28, 34);
+    color: gold;
+}
+
+/* Show the dropdown on hover */
+.profile-dropdown:hover .profile-dropdown-content {
+    display: block;
+}

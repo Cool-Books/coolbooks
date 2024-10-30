@@ -1,0 +1,94 @@
+.books-heading {
+    padding-top: 50px;
+    color: rgb(25, 158, 92);
+    transition: color 0.3s ease;
+}
+
+.books-heading:hover {
+    color: yellow;
+}
+
+.books-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: deeppink;
+    margin-top: 40px;
+    padding: 20px;
+    width: 100%;
+    min-height: auto;
+    /* Ensures the container takes up at least the full viewport height */
+    box-sizing: border-box;
+    /* Includes padding in width/height calculations */
+}
+
+.book-item {
+    margin: 15px;
+    text-align: center;
+    width: 200px;
+}
+
+.book-cover {
+    height: 15rem;
+    /* Set a fixed height for the images */
+    width: auto;
+    /* The width adjusts automatically to maintain aspect ratio */
+    object-fit: cover;
+    /* Ensures the image covers the space without distortion */
+    border-radius: 5px;
+    /* Slightly rounds the corners of the image */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Adds a subtle shadow effect */
+}
+
+.book-cover:hover {
+    cursor: pointer;
+}
+
+
+.genre-section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.genre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 35px;
+    text-align: center;
+}
+
+.genre-icon {
+    width: 10rem;
+    height: 10rem;
+    /* Adjust size as needed */
+    margin-bottom: 0px;
+}
+
+.genre p {
+    margin-top: 0;
+    font-size: 14px;
+}
+
+#fantansy p {
+    color: rgb(27, 165, 211);
+}
+
+#romance p {
+    color: deeppink;
+}
+
+#best p {
+    color: white;
+}
+
+#scifi p {
+    color: yellow;
+}
+
+#fict p {
+    color: gold;
+}

@@ -1,0 +1,11 @@
+GET https://api.themoviedb.org/3/movie/933260/videos
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MTY1M2ViYzVlNzQ2YTJjNzI5M2QyOWIxZDBjNDM1YyIsIm5iZiI6MTcyOTc3OTE1NC4wMDA1MjMsInN1YiI6IjY3MTk2YWFkMzRjMGZhYmQ2ODFjNGM3MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pvWuMHfwweSdGFGVVSqGfFD8ymSVK2zxa4yx46NcdLc
+# headers = {
+#     "accept": "application/json",
+#     "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MTY1M2ViYzVlNzQ2YTJjNzI5M2QyOWIxZDBjNDM1YyIsIm5iZiI6MTcyOTc3OTE1NC4wMDA1MjMsInN1YiI6IjY3MTk2YWFkMzRjMGZhYmQ2ODFjNGM3MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pvWuMHfwweSdGFGVVSqGfFD8ymSVK2zxa4yx46NcdLc"
+# }
+
+# response = requests.get(url, headers=headers)
+
+# print(response.text)

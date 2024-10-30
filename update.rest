@@ -1,0 +1,6 @@
+PATCH http://localhost:5000/coolbooks/all_books/8630763825
+Content-Type: application/json
+
+{
+    "author": "Mojibola"
+}

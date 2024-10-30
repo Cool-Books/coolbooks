@@ -1,0 +1,433 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  /* overflow: scroll; */
+  background-color: rgba(10, 10, 10, 0.867);
+}
+
+::selection {
+  color: #fff;
+  background: #d43f8d;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  /* Reduced padding */
+}
+
+.sign {
+  width: 330px;
+  margin-top: 30px;
+  background: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 30px 20px 10px 20px;
+  margin-bottom: 30px;
+}
+
+.container header {
+  font-size: 30px;
+  /* Reduced font size */
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  /* Reduced margin */
+}
+
+.container .form-outer {
+  width: 100%;
+  overflow: hidden;
+}
+
+.container .form-outer form {
+  display: flex;
+  width: 400%;
+}
+
+.form-outer form .page {
+  width: 25%;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.form-outer form .page .title {
+  text-align: left;
+  font-size: 22px;
+  /* Reduced font size */
+  font-weight: 500;
+}
+
+.form-outer form .page .field {
+  width: 330px;
+  height: auto;
+  /* Reduced height */
+  margin: 25px 0;
+  /* Reduced margin */
+  display: flex;
+  position: relative;
+}
+
+form .page .field .label {
+  position: absolute;
+  top: -25px;
+  /* Adjusted label position */
+  font-weight: 500;
+}
+
+form .page .field input {
+  height: 100%;
+  width: 100%;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  padding-left: 15px;
+  font-size: 16px;
+  /* Reduced font size */
+}
+
+form .page .field select {
+  width: 100%;
+  padding-left: 10px;
+  font-size: 16px;
+  /* Reduced font size */
+  font-weight: 500;
+}
+
+form .page .field button {
+  width: 100%;
+  height: calc(100% + 5px);
+  border: none;
+  background: #d33f8d;
+  margin-top: -15px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  /* Reduced font size */
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: 0.5s ease;
+}
+
+form .page .field button:hover {
+  background: #000;
+}
+
+form .page .btns button {
+  margin-top: -15px !important;
+  /* Adjusted button margin */
+}
+
+form .page .btns button.prev {
+  margin-right: 3px;
+  font-size: 16px;
+  /* Reduced font size */
+}
+
+form .page .btns button.next {
+  margin-left: 3px;
+}
+
+.container .progress-bar {
+  display: flex;
+  margin: 30px 0;
+  /* Reduced margin */
+  user-select: none;
+}
+
+.container .progress-bar .step {
+  text-align: center;
+  width: 100%;
+  position: relative;
+}
+
+.container .progress-bar .step p {
+  font-weight: 500;
+  font-size: 16px;
+  /* Reduced font size */
+  color: #000;
+  margin-bottom: 5px;
+  /* Reduced margin */
+}
+
+.progress-bar .step .bullet {
+  height: 22px;
+  /* Reduced size */
+  width: 22px;
+  border: 2px solid #000;
+  display: inline-block;
+  border-radius: 50%;
+  position: relative;
+  transition: 0.2s;
+  font-weight: 500;
+  font-size: 15px;
+  /* Reduced font size */
+  line-height: 22px;
+  /* Adjusted line height */
+}
+
+.progress-bar .step .bullet.active {
+  border-color: #d43f8d;
+  background: #d43f8d;
+}
+
+.progress-bar .step .bullet span {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.progress-bar .step .bullet.active span {
+  display: none;
+}
+
+.progress-bar .step .bullet:before,
+.progress-bar .step .bullet:after {
+  position: absolute;
+  content: '';
+  bottom: 11px;
+  right: -51px;
+  height: 3px;
+  width: 44px;
+  background: #262626;
+}
+
+.progress-bar .step .bullet.active:after {
+  background: #d43f8d;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: animate 0.3s linear forwards;
+}
+
+@keyframes animate {
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.progress-bar .step:last-child .bullet:before,
+.progress-bar .step:last-child .bullet:after {
+  display: none;
+}
+
+.progress-bar .step p.active {
+  color: #d43f8d;
+  transition: 0.2s linear;
+}
+
+.progress-bar .step .check {
+  position: absolute;
+  left: 50%;
+  top: 70%;
+  font-size: 14px;
+  /* Reduced font size */
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.progress-bar .step .check.active {
+  display: block;
+  color: #fff;
+}
+
+
+#bio-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-bottom: 50px;
+}
+
+#bio-input {
+  width: 93%;
+  height: 100px;
+  /* Set the height for a bigger text area */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+  /* Optional: Disable resizing if you want to keep the fixed height */
+}
+
+#char-count {
+  font-size: 12px;
+  color: #555;
+  margin-top: 5px;
+  /* Space between the text area and the character count */
+}
+
+#password {
+  display: flex;
+  flex-direction: column;
+  /* align-items: flex-start; */
+  justify-content: flex-start;
+}
+#pwd-conf {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: flex-start; */
+  align-items: flex-start;
+}
+
+#password_confirm {
+  width: 95%;
+}
+
+#pwd-field {
+  width: 95%;
+  /* height: 40px; */ 
+  /* font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px; */
+}
+
+#pwd-req {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 9px;
+  color: #555;
+  margin-top: 5px;
+  /* Add space between the input and character count */
+}
+
+.tochange {
+  margin-bottom: 40px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+
+.logo {
+  max-width: 360px;
+  cursor: pointer;
+  height: auto;
+}
+
+.social-icons a img:hover {
+  transform: scale(1.1);
+  /* Slightly enlarge the icon on hover */
+  background-color: yellow;
+  /* Yellow background on hover */
+}
+
+.auth-link {
+  color: rgb(227, 220, 220);
+  /* Default color */
+  text-decoration: none;
+  /* Remove underline */
+  transition: color 0.3s ease;
+}
+
+.auth-link:hover {
+  color: yellow;
+  text-decoration: none;
+  /* Change color on hover */
+}
+
+#signtxt {
+  color: rgb(166, 154, 85);
+  font-weight: 200px;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+  text-decoration: none;
+  border: 2px solid rgb(196, 172, 39);
+  color: gold;
+  /* Slightly enlarges on hover */
+}
+
+.left {
+  margin-left: 8px
+}
+
+.right {
+  margin-right: 8px
+}
+
+.social-media {
+  display: flex;
+  flex-direction: row;
+}
+
+.social-icon {
+  margin-right: 12px;
+  padding: 10px;
+  /* Adjust padding as needed */
+  border: 2px solid deeppink;
+  text-decoration: none;
+  /* Border color */
+  border-radius: 50%;
+  /* Circle shape */
+  width: 15px;
+  /* Adjust width */
+  height: 15px;
+  /* Adjust height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: deeppink;
+  /* Icon color */
+  font-size: 1rem;
+  /* Icon size */
+  transition: color 0.3s ease;
+  /* Removes underline */
+}
+
+#auth-link {
+  margin-right: 6px;
+}
+
+.space {
+  margin-bottom: 20px;
+}
+
+
+#ast {
+  font-size: 17px;
+  color: red;
+}
+
+@media (max-width: 768px) {
+  .right {
+    margin-top: 5px;
+  }
+
+  .auth-link {
+    font-size: 14px;
+    font-weight: 40px;
+  }
+
+  .logo {
+    width: 250px;
+  }
+
+  .social-icon {
+    width: 11px;
+    height: 11px;
+  }
+}
+
+.match {
+  color: red;
+  font-size: 9px;
+}

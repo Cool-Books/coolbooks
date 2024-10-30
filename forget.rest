@@ -1,0 +1,6 @@
+POST http://localhost:5000/coolbooks/forgot_pwd
+Content-Type: application/json
+
+{
+    "email": "lekanmojibola@gmail.com"
+}

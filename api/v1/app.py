@@ -11,8 +11,11 @@ load_dotenv()
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
-CORS(app, resources={r"coolbooks/*": {"origins": "*"}})
+CORS(app, resources={r"/coolbooks/*": {"origins": "*"}})
 
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'}
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'oladevcoolbooks@gmail.com'
@@ -32,7 +35,9 @@ app.config['SESSION_FILE_DIR'] = './flask_session'  # Folder to store session fi
 
 Session(app)
 
-auth = SessionAuth()
+auth = None
+# auth = SessionAuth() 
+
 
 @app.before_request
 def check_auth():
@@ -41,7 +46,8 @@ def check_auth():
     if not auth:
         return
     exc_path = ['/coolbooks/all_books/', '/coolbooks/login/',
-                '/coolbooks/signup/', '/coolbooks/forgot_pwd/', '/coolbooks/reset_pwd/']
+                '/coolbooks/signup/', '/coolbooks/forgot_pwd/', '/coolbooks/reset*',
+                '/static*', '/coolbooks/']
 
     if not auth.require_auth(request.path, exc_path):
         return
@@ -76,6 +82,7 @@ def forbidden(error):
 def unauthorized(error):
     """handles unauthorized"""
     return jsonify({'Error': "Unauthorized"})
+
 
 if __name__ == '__main__':
     app.run(debug=True)

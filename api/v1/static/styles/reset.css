@@ -1,0 +1,130 @@
+#pwd-req {
+    display: flex;
+    flex-wrap: wrap;
+    color: rgb(154, 149, 149);
+    font-size: 10px;
+    margin-bottom: 9px;
+}
+
+#pwd {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgba(10, 10, 10, 0.867);
+    font-family: Avenir-Roman, sans-serif;
+}
+
+.logo {
+    max-width: 360px;
+    cursor: pointer;
+    height: auto;
+}
+
+.social-icons a img:hover {
+    transform: scale(1.1);
+    /* Slightly enlarge the icon on hover */
+    background-color: yellow;
+    /* Yellow background on hover */
+}
+.match {
+    font-size: 10px;
+    color: rgb(153, 150, 150);
+}
+
+/* Custom styles to remove underline and set colors */
+.auth-link {
+    color: rgb(227, 220, 220);
+    /* Default color */
+    text-decoration: none;
+    /* Remove underline */
+    transition: color 0.3s ease;
+}
+
+.auth-link:hover {
+    color: yellow;
+    text-decoration: none;
+    /* Change color on hover */
+}
+
+.social-media {
+    display: flex;
+    justify-content: flex-start;
+    /* Aligns icons to the left */
+}
+
+
+.social-icon {
+    margin-right: 12px;
+    padding: 10px;
+    /* Adjust padding as needed */
+    border: 2px solid deeppink;
+    /* Border color */
+    border-radius: 50%;
+    /* Circle shape */
+    width: 35px;
+    /* Adjust width */
+    height: 35px;
+    /* Adjust height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: deeppink;
+    /* Icon color */
+    font-size: 22px;
+    /* Icon size */
+    transition: color 0.3s ease;
+    /* Removes underline */
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+    text-decoration: none;
+    border: 2px solid rgb(196, 172, 39);
+    color: gold;
+    /* Slightly enlarges on hover */
+}
+
+.social-auth {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.s-media,
+.auth-l {
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .logo {
+        width: 250px;
+    }
+
+    .auth-l {
+        margin-top: 9px;
+    }
+    .social-icon {
+        font-size: 19px;
+        height: 32px;
+        width: 32px;
+    }
+    .auth-link {
+        font-size: 14px;
+        font-weight: 100px;
+    }
+
+    #for-card {
+        flex: 0 0 100%;
+        max-width: 90%;
+        margin-left: 15px;
+        padding: 0 15px;
+    }
+
+}

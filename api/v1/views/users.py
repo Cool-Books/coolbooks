@@ -23,9 +23,8 @@ def get_a_user(user_id):
             abort(404)
         return jsonify(request.current_user.to_json())
     user = User.get(user_id)
-    if user is None:
-        abort(404)      
-    user = user[0]
+    if user is None or not user:
+        abort(404)
     return jsonify(user.to_json())
 
 @app_views.route('/users/', strict_slashes=False, methods=['DELETE'])

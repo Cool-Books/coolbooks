@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """base class for the auth"""
 from flask import request
+from typing import List
 import os
 from dotenv import load_dotenv
 
@@ -9,13 +10,17 @@ load_dotenv()
 
 class Auth:
     """auth model"""
-    def require_auth(self, path: str, exc_path: list) -> bool:
-        """check if a path requires authentication"""
-        if not path or path is None or not exc_path or exc_path is None:
+    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
+        """require authentication"""
+        if path is None or excluded_paths is None or not excluded_paths:
             return True
-        path = path if path.endswith('/') else path + '/'
-        if path in exc_path:
-            return False
+        if not path.endswith('/'):
+            path += '/'
+        for get_path in excluded_paths:
+            if get_path.endswith('*') and path.startswith(get_path[:-1]):
+                return False
+            elif path == get_path:
+                return False
         return True
 
     def authorization_header(self, request) -> str:

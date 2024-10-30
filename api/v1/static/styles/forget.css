@@ -1,0 +1,109 @@
+html {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgba(10, 10, 10, 0.867);
+    font-family: Avenir-Roman, sans-serif;
+}
+
+.logo {
+    max-width: 360px;
+    cursor: pointer;
+    height: auto;
+}
+
+.social-icons a img:hover {
+    transform: scale(1.1);
+    /* Slightly enlarge the icon on hover */
+    background-color: yellow;
+    /* Yellow background on hover */
+}
+
+/* Custom styles to remove underline and set colors */
+.auth-link {
+    color: rgb(227, 220, 220);
+    /* Default color */
+    text-decoration: none;
+    font-size: 15px;
+    /* Remove underline */
+    transition: color 0.3s ease;
+}
+
+#s-media {
+    margin-top: 6px;
+    margin-left: -2px;
+}
+
+.auth-link:hover {
+    color: yellow;
+    text-decoration: none;
+    /* Change color on hover */
+}
+
+.social-media {
+    display: flex;
+    justify-content: flex-start;
+    /* Aligns icons to the left */
+}
+
+
+.social-icon {
+    margin-right: 12px;
+    padding: 10px;
+    /* Adjust padding as needed */
+    border: 2px solid deeppink;
+    /* Border color */
+    border-radius: 50%;
+    /* Circle shape */
+    width: 35px;
+    /* Adjust width */
+    height: 35px;
+    /* Adjust height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: deeppink;
+    /* Icon color */
+    font-size: 20px;
+    /* Icon size */
+    transition: color 0.3s ease;
+    /* Removes underline */
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+    text-decoration: none;
+    border: 2px solid rgb(196, 172, 39);
+    color: gold;
+    /* Slightly enlarges on hover */
+}
+
+@media (max-width: 768px) {
+    .logo {
+        width: 250px;
+    }
+
+    #auth-l {
+        margin-top: -2rem;
+    }
+
+    .adjust{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* #s-media {
+        margin-top: 6px;
+        margin-left: -6rem;
+    }
+ */
+
+    #for-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 350px;
+    }
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href='../static/styles/test.css' rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <title>CoolBooks</title>
+</head>
+
+<body>
+    <nav class="mynavbar" style="background-color: rgb(3, 37, 65);">
+        <div class="nav-items">
+            <a class="nav-brand" id="cool" href="http://localhost:5000/coolbooks/">Cool<span><b>Books</b></span></a>
+            <div class="dropdown">
+                <a class="nav-link" href="#">Books</a>
+                <div class="dropdown-content">
+                    <a href="#">Popular</a>
+                    <a href="#">Top Rated</a>
+                    <a href="#">Best Seller</a>
+                </div>
+            </div>
+            <div class="dropdown" id="genre-get">
+                <a class="nav-link" href="#">Genres</a>
+                <div class="dropdown-content">
+                    <a href="#">Action</a>
+                    <a href="#">Drama</a>
+                    <a href="#">Thriller</a>
+                    <a href="#">Romance</a>
+                    <a href="#">Horror</a>
+                </div>
+            </div>
+            <div class="dropdown" id="more">
+                <a class="nav-link" href="#">More</a>
+                <div class="dropdown-content">
+                    <a href="#">About Developer</a>
+                    <a href="#">Support</a>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="profile-dropdown">
+                <img class="grav" id="grav" alt="profile" style="display: none;">
+                <i id="fallbackIcon" class="fas fa-user-circle" style="display: none;"></i>
+                <div class="profile-dropdown-content" id="profile">
+                    <a href="#">Profile</a>
+                    <a href="#">Post a book</a>
+                    <a href="#">Logout</a>
+                </div>
+            </div>
+            <div class="searchbar">
+                <input type="text" id="searchInput" placeholder="Search...">
+                <div class="search-icon" id="searchIcon"><i class="fas fa-search"></i></div>
+            </div>
+        </div>
+    </nav>
+    <img class="welcome" src="../static/images/newread.png" alt="Welcome Image">
+    <div class="trending-container" id="trending-container">
+        <h4>Trending</h4>
+        <div>
+            <button class="icon" id="left-icon"><i class="fas fa-angle-double-left"></i></button>
+        </div>
+        <div class="trends-cover">
+            <div class="trending-row" id="trendingRow">
+            </div>
+        </div>
+        <div>
+            <button class="icon" id="right-icon"><i class="fas fa-angle-double-right"></i></button>
+        </div>
+    </div>
+
+    <div class="genre-container">
+        <h4>Choose your genre</h4>
+        <div class="just-genre">
+            <div class="genre" id="fantansy">
+                <a href="#"><img src="../static/images/fantasy.svg" alt="fantansy" class="genre-icon"></a>
+                <p><b>FANTANSY</b></p>
+            </div>
+            <div class="genre" id="romance">
+                <a href="#"><img src="../static/images/romance2.svg" alt="romance" class="genre-icon"></a>
+                <p><b>ROMANCE</b></p>
+            </div>
+            <div class="genre" id="best">
+                <a href="#"><img src="../static/images/bestsellers.svg" alt="bestsellers" class="genre-icon"></a>
+                <p><b>BEST SELLER</b></p>
+            </div>
+            <div class="genre" id="scifi">
+                <a href="#"><img src="../static/images/scifi.svg" alt="scifi" class="genre-icon"></a>
+                <p><b>SCI-FI</b></p>
+            </div>
+            <div class="genre" id="fict">
+                <a href="#"><img src="../static/images/nonfiction.svg" alt="nonfiction" class="genre-icon"></a>
+                <p><b>NON FICTION</b></p>
+            </div>
+        </div>
+    </div>
+    <script src="../static/scripts/test.js"></script>
+</body>
+
+</html>

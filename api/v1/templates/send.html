@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block body %}
+<form id="book-form" enctype="multipart/form-data">
+    <input type="text" name="title" placeholder="Book Title" required>
+    <input type="text" name="author" placeholder="Author" required>
+    <input type="text" name="content" placeholder="content" required>
+    <input type="file" name="cover" accept="image/*" required>
+    <button type="submit">Add Book</button>
+</form>
+
+<script>
+    document.getElementById('book-form').onsubmit = async function (event) {
+        event.preventDefault();  // Prevent the default form submission
+
+        // Get the form data
+        const form = document.getElementById('book-form');
+        const formData = new FormData(form);  // Creates FormData object from form
+
+        fetch('http://localhost:5000/coolbooks/post_book', {
+            method: 'POST',
+            body: formData,
+        })
+         .then((response) => {
+            return response.json()
+             .then((data) => {
+                if (response.status === 200) {
+                    alert(data.success)
+                    location.reload();
+                } else {
+                    alert(data.error);
+                }
+             }).catch(err => {
+                alert(err);
+             })
+         })
+    };
+</script>
+{% endblock %}

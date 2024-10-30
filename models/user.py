@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """user model"""
 import re
-import unittest
 from models.base import Base, DATA
 import bcrypt
-import base64
+import hashlib
 
 
 
@@ -19,7 +18,9 @@ class User(Base):
         self.first_name = kwargs.get('first_name')
         self.last_name = kwargs.get('last_name')
         self.other_names = kwargs.get('other_names')
-        self.is_author = kwargs.get('is_author', "NO")
+        self.gender = kwargs.get('gender', "MALE")
+        self.user_name = kwargs.get('user_name')
+        self.gravatar = self.grav()
     
     
     @property
@@ -33,7 +34,7 @@ class User(Base):
         if not self.is_loading:
             self.validate_pwd(pwd)
             hashed_pwd = bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())
-            self._password = hashed_pwd.decode('utf-8')  # Store directly without base64 encoding
+            self._password = hashed_pwd.decode('utf-8') 
         else:
             self._password = pwd
 
@@ -103,19 +104,29 @@ class User(Base):
         return True
 
     @property
-    def is_author(self) -> str:
-        """return author"""
-        return self._is_author
+    def gender(self) -> str:
+        """return gender"""
+        return self._gender
 
-    @is_author.setter
-    def is_author(self, author: str) -> None:
-        """sets author"""
-        if author is None:
-            self._is_author = "NO"
+    @gender.setter
+    def gender(self, gen: str) -> None:
+        """sets gen"""
+        if gen is None:
+            self._gender = "MALE"
         else:
-            author = author.upper()
-            self._is_author = author
+            gen = gen.upper()
+            self._gender = gen
 
+    @property
+    def user_name(self):
+        """returns username"""
+        return self._user_name
+    
+    @user_name.setter
+    def user_name(self, us_name):
+        """sets username"""
+        self.validate_name(us_name)
+        self._user_name = us_name
 
     @staticmethod
     def validate_pwd(pwd: str) -> bool:
@@ -160,3 +171,8 @@ class User(Base):
         if len(mail) > 100:
             raise ValueError("Email too long")
         return True
+
+    def grav(self, size=100):
+        email = self.email
+        email_hash = hashlib.md5(email.encode()).hexdigest()
+        return f"https://www.gravatar.com/avatar/{email_hash}?s={size}"

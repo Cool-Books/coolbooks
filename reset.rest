@@ -1,0 +1,7 @@
+POST http://localhost:5000/coolbooks/reset_pwd?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNldF9wYXNzd29yZCI6Imxla2FubW9qaWJvbGFAZ21haWwuY29tIiwiZXhwIjoxNzI4OTQ1MjMzfQ.orOakdQKecLGTdHdh9yREV0m-jBIR2pfWhQ_PgIw00M
+Content-Type: application/json
+
+{
+    "new_password": "Moji@343",
+    "new_password_confirm": "Moji@343"
+}

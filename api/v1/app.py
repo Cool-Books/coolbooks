@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, abort, session
+from flask import Flask, jsonify, request, abort, session, render_template
 import os
 from flask_mail import Mail
 from flask_cors import CORS
@@ -36,7 +36,7 @@ app.config['SESSION_FILE_DIR'] = './flask_session'  # Folder to store session fi
 Session(app)
 
 auth = None
-# auth = SessionAuth() 
+auth = SessionAuth() 
 
 
 @app.before_request
@@ -60,6 +60,14 @@ def check_auth():
         abort(401)
     request.current_user = user
 
+
+@app.teardown_appcontext
+def tear(exception):
+    """close the session"""
+    from models import storage
+
+    storage.close()
+
 @app.errorhandler(ValueError)
 def not_found(error):
     """handles 404"""
@@ -67,6 +75,7 @@ def not_found(error):
         'Error': str(error),
         'Status Code': 400,
     }), 400
+
 
 @app.errorhandler(404)
 def page_not_found(error):

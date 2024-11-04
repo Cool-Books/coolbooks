@@ -29,9 +29,8 @@ const fallBack = document.getElementById('fallbackIcon')
 document.addEventListener('DOMContentLoaded', gravatarLoader)
 
 function gravatarLoader() {
-    fetch('http://localhost:5000/coolbooks/users/03a978e3-9190-4243-9679-c3b4367f907d')
+    fetch('http://localhost:5000/coolbooks/users/me')
         .then((response) => {
-            console.log(response)
             return response.json()
                 .then((data) => {
                     if (response.status == 200) {

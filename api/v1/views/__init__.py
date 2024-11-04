@@ -7,4 +7,3 @@ from api.v1.views.index import *
 from api.v1.views.books import *
 from api.v1.views.users import *
 
-Books.load_from_file()

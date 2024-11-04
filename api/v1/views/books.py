@@ -45,7 +45,7 @@ def post_a_book():
         return jsonify({'Error': "Book already exists"}), 400
 
     if 'cover' not in request.files:
-        return jsonify({'error': 'No cover image uploaded'}), 400
+        return jsonify({'Error': 'No cover image uploaded'}), 400
 
     file = request.files['cover']
     if file and allowed_file(file.filename):
@@ -64,7 +64,7 @@ def post_a_book():
         book.save()
         return jsonify({'success': f'{book.title} successfully added!'})
     else:
-        return jsonify({'error': 'Invalid file format'}), 400
+        return jsonify({'Error': 'Invalid file format'}), 400
 
 
 @app_views.route('/all_books/<isbn>', strict_slashes=False, methods=['DELETE'])

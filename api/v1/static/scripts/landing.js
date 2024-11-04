@@ -1,4 +1,5 @@
 function fetchBooksList() {
+    const booksList = document.getElementById('books-list');
     fetch('http://localhost:5000/coolbooks/all_books')
         .then((response) => {
             if (!response.ok) {
@@ -7,7 +8,6 @@ function fetchBooksList() {
             return response.json();
         })
         .then((data) => {
-            const booksList = document.getElementById('books-list');
             booksList.innerHTML = '';
             if (data.length <= 5) {
                 data.forEach((book) => {
@@ -26,7 +26,15 @@ function fetchBooksList() {
                 }
             }
         })
-        .catch(err => console.error('Fetch error:', err)); // Log errors
+        .catch(err => {
+            booksList.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const bookItem = document.createElement('div');
+                bookItem.classList.add('book-item');
+                bookItem.innerHTML = "<img src='../static/images/bookcover.png' alt='bookcover'></img>";
+                booksList.appendChild(bookItem);
+            }
+        }); // Log errors
 }
 
 document.addEventListener('DOMContentLoaded', fetchBooksList); // Correct function name

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """users endpoints"""
 import json
-from flask import request, abort, jsonify
+from flask import request, abort, jsonify, render_template
 from models.user import User
 from api.v1.views import app_views
 
@@ -39,12 +39,17 @@ def del_user():
         abort(400)
     return jsonify({})
 
-@app_views.route('/users/', strict_slashes=False, methods=['PATCH'])
-def update_user():
+@app_views.route('/users/<id>', strict_slashes=False, methods=['PATCH'])
+def update_user(id):
     """this view handles the updating of the user"""
-    if request.current_user is None:
-        abort(401)
-    user = User.search({'id': request.current_user.id})
+    if id == 'me':
+        if request.current_user is None or not request.current_user:
+            abort(401)
+        user = User.search({'id': request.current_user.id})
+    else:
+        user = User.search({'id': id})
+    user = user[0]
+    
     if user is None:
         abort(401)
     to_be_updated = request.get_json()
@@ -52,3 +57,4 @@ def update_user():
         return jsonify({'Error': "No data provided"}), 400
     user.update(to_be_updated)
     return jsonify({'success': 'Profile successfully updated'}) 
+

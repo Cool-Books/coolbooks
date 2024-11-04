@@ -1,11 +1,14 @@
 .books-heading {
-    padding-top: 50px;
+    margin-top: 50px;
+}
+
+.books-heading b {
     color: rgb(25, 158, 92);
     transition: color 0.3s ease;
 }
 
-.books-heading:hover {
-    color: yellow;
+.books-heading b:hover {
+    color: gold;
 }
 
 .books-list {

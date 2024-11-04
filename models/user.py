@@ -1,14 +1,31 @@
 #!/usr/bin/env python3
 """user model"""
 import re
-from models.base import Base, DATA
+from sqlalchemy import Column, String
+from models.base import Base
 import bcrypt
+from dotenv import load_dotenv
 import hashlib
+import os
 
+load_dotenv()
+
+DB_TYPE=os.getenv('DB_TYPE')
 
 
 class User(Base):
     """user model"""
+    __tablename__ = 'users'
+    _password = Column(String(60), nullable=False)
+    _email = Column(String(60), nullable=False)
+    _first_name = Column(String(60), nullable=False)
+    _last_name = Column(String(60), nullable=False)
+    other_names = Column(String(60), nullable=True)
+    gender = Column(String(60), nullable=False)
+    user_name = Column(String(60), nullable=False)
+    _bio = Column(String(500), nullable=True)
+    gravatar = Column(String(100), nullable=False)
+
     def __init__(self, *args, **kwargs):
         self.is_loading = kwargs.get('is_loading', False)
         super().__init__(*args, **kwargs)
@@ -31,12 +48,17 @@ class User(Base):
     @password.setter
     def password(self, pwd: str) -> None:
         """setting the password: defining constraints"""
-        if not self.is_loading:
+        if DB_TYPE != 'db':
+            if not self.is_loading:
+                self.validate_pwd(pwd)
+                hashed_pwd = bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())
+                self._password = hashed_pwd.decode('utf-8') 
+            else:
+                self._password = pwd
+        else:
             self.validate_pwd(pwd)
             hashed_pwd = bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())
             self._password = hashed_pwd.decode('utf-8') 
-        else:
-            self._password = pwd
 
 
     def is_valid_pwd(self, pwd: str) -> bool:
@@ -67,6 +89,7 @@ class User(Base):
     def first_name(self) -> str:
         """returns first name"""
         return self._first_name
+
 
     @first_name.setter
     def first_name(self, name: str) -> None:
@@ -103,30 +126,6 @@ class User(Base):
             raise ValueError("Bio must be less than 250")
         return True
 
-    @property
-    def gender(self) -> str:
-        """return gender"""
-        return self._gender
-
-    @gender.setter
-    def gender(self, gen: str) -> None:
-        """sets gen"""
-        if gen is None:
-            self._gender = "MALE"
-        else:
-            gen = gen.upper()
-            self._gender = gen
-
-    @property
-    def user_name(self):
-        """returns username"""
-        return self._user_name
-    
-    @user_name.setter
-    def user_name(self, us_name):
-        """sets username"""
-        self.validate_name(us_name)
-        self._user_name = us_name
 
     @staticmethod
     def validate_pwd(pwd: str) -> bool:

@@ -22,13 +22,19 @@ submitBtn.addEventListener('click', function (event) {
         body: JSON.stringify(formData) //send as json
     })
         .then((response) => {
-            return response.json().then(data => {
+            return response.json()
+             .then(data => {
                 if (response.status === 200) {
-                    alert(data.success);
-                    location.reload();
+                    if (data.redirect) {
+                        alert(data.success);
+                        window.location.href = data.redirect;
+                    } else {
+                        alert(data.success);
+                        window.location.href = '/coolbooks/homepage';
+                    }
                 } else {
-                    return alert(data.Error);
+                    alert(data.Error);
                 }
-            }).catch(err => { return err; });
-        });
+             })
+        }).catch(err => {});
 });

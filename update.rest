@@ -1,6 +1,6 @@
-PATCH http://localhost:5000/coolbooks/all_books/8630763825
+PATCH http://localhost:5000/coolbooks/users/224ee776-bf4a-4d45-9403-cb1ba1b64ec0
 Content-Type: application/json
 
 {
-    "author": "Mojibola"
+    "first_name": "Zen"
 }

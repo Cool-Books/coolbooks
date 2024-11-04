@@ -3,7 +3,7 @@
 from crypt import methods
 import jwt
 from flask import (jsonify, make_response,
-request, current_app, abort, url_for, render_template)
+request, current_app, abort, url_for, render_template, redirect)
 from api.v1.views import app_views
 from models.book import Books
 from models.user import User
@@ -50,7 +50,7 @@ def get_login():
         if not user.is_valid_pwd(password):
             return jsonify({'Error': "Invalid password"}), 401
         session_id = auth.create_session(user.id)
-        response = make_response(jsonify({'success': "Login success"}))
+        response = make_response(jsonify({'success': "Login success", 'redirect': '/coolbooks/homepage'}))
         response.set_cookie("session_id", session_id)
         return response, 200
     return render_template('login.html')
@@ -175,7 +175,7 @@ def reset_to_html():
     return render_template("reset.html", token=token)
 
 @app_views.route('/', strict_slashes=False, methods=['GET'])
-def homepage():
+def landing():
     """home page"""
     return render_template('landingpage.html')
 
@@ -219,3 +219,8 @@ def horror():
 def thriller():
     """thriller"""
     return render_template('thriller.html')
+
+@app_views.route('/homepage', strict_slashes=False, methods=['GET'])
+def home():
+    """return the users homepage"""
+    return render_template('user.html')

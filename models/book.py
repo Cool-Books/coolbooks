@@ -2,6 +2,7 @@
 """book model"""
 from datetime import datetime
 import uuid
+from sqlalchemy import INTEGER, Column, String, DateTime, Integer, Text
 import random
 from models.base import Base
 from models.user import User
@@ -10,6 +11,17 @@ from models.user import User
 
 class Books(Base):
     """model for all books"""
+    __tablename__ = 'books'
+    _title = Column(String(60), nullable=False)
+    _author = Column(String(60), nullable=False)
+    _isbn = Column(String(20), nullable=False)
+    _published_year = Column(Integer, nullable=False)
+    edition = Column(String(60), nullable=True)
+    genre = Column(String(60), nullable=True)
+    _description = Column(String(200), nullable=True)
+    _content = Column(Text, nullable=False)
+    user_id = Column(String(60), nullable=True)
+    cover = Column(String(60), nullable=True)
 
     def __init__(self, *args, **kwargs):
         self.is_loading = kwargs.get('is_loading', False)
@@ -17,7 +29,7 @@ class Books(Base):
         self.title = kwargs.get('title')
         self.author = kwargs.get('author')
         self.isbn = kwargs.get('isbn')
-        self.published_date = kwargs.get('published_date')
+        self.published_year = kwargs.get('published_year')
         self.edition = kwargs.get('edition')
         self.genre = kwargs.get('genre')
         self.description = kwargs.get('description')
@@ -45,25 +57,25 @@ class Books(Base):
     def isbn(self, get_isbn: str):
         """sets isbn"""
         if get_isbn is None or not get_isbn:
-            self._isbn = self.generate_isbn10()
+            self._isbn = str(self.generate_isbn10())
         else:
             if not self.is_loading:
                 self.is_valid_isbn10(get_isbn)
                 if Books.search({'isbn': get_isbn}):
                     raise ValueError('Book with the same ISBN exists')
-            self._isbn = get_isbn
+            self._isbn = str(get_isbn)
 
     @property
-    def published_date(self):
+    def published_year(self):
         """return year of publish"""
-        return self._published_date
+        return self._published_year
 
-    @published_date.setter
-    def published_date(self, year):
+    @published_year.setter
+    def published_year(self, year):
         if year is None:
-            self._published_date = datetime.now().year
+            self._published_year = datetime.now().year
         else:
-            self._published_date = year
+            self._published_year = year
 
     @property
     def description(self) -> str:

@@ -1,4 +1,4 @@
-POST http://localhost:5000/netflix/signup
+POST http://localhost:5000/coolbooks/signup
 Content-Type: application/json
 
 {
@@ -7,5 +7,6 @@ Content-Type: application/json
     "email": "lekanmojibola@gmail.com",
     "password": "Moji@0534",
     "password_confirm": "Moji@0534",
-    "user_name": "kingQun"
+    "user_name": "kingQun",
+    "gender": "MALE"
 }

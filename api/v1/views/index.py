@@ -11,31 +11,157 @@ from models.user import User
 
 @app_views.route('/signup', strict_slashes=False, methods=['GET', 'POST'])
 def sign_up():
-    """this view handles sign up of the user"""
+    """
+User sign-up endpoint
+---
+tags:
+  - users
+summary: Sign up a new user
+description: Allows a user to sign up by providing their personal information.
+parameters:
+  - name: first_name
+    in: body
+    type: string
+    required: true
+    description: First name of the user
+    example: John
+  - name: last_name
+    in: body
+    type: string
+    required: true
+    description: Last name of the user
+    example: Doe
+  - name: email
+    in: body
+    type: string
+    required: true
+    description: Email address of the user
+    example: johndoe@example.com
+  - name: password
+    in: body
+    type: string
+    required: true
+    description: User password
+    example: securepassword
+  - name: password_confirm
+    in: body
+    type: string
+    required: true
+    description: Password confirmation
+    example: securepassword
+responses:
+  200:
+    description: User successfully created
+    schema:
+      type: object
+      properties:
+        success:
+          type: string
+          example: "User created successfully"
+  400:
+    description: Invalid or missing user data
+    schema:
+      type: object
+      properties:
+        Error:
+          type: string
+          example: "Invalid user"
+  409:
+    description: User already signed up
+    schema:
+      type: object
+      properties:
+        Error:
+          type: string
+          example: "You have already signed up"
+    """
+
     if request.method == 'POST':
-        data = request.get_json()  #dict
+        data = request.get_json()
         if data is None or not data:
             return jsonify({'Error': "Invalid user"})
         data.pop('password_confirm')
-        # ----- i have to first search for if user exists in db -----
+
         first_name = data.get('first_name')
         last_name = data.get('last_name')
         email = data.get('email')
         try_user = User.search({'first_name': first_name, 'last_name': last_name, 'email': email})
         try:
             try_user = try_user[0]
-            return jsonify({'Error': 'You have already signed up'})
+            return jsonify({'Error': 'You have already signed up'}), 409
         except IndexError:
             pass
-        # ---- end of search ------
+
         new_user = User(**data)
         new_user.save()
         return jsonify({'success': "User created successfully"}), 200
+
     return render_template('signup.html')
+
 
 @app_views.route('/login', strict_slashes=False, methods=['GET', 'POST'])
 def get_login():
-    """this checks the login details"""
+    """
+User login endpoint
+---
+tags:
+  - users
+summary: Login a user
+description: Allows a user to log into the system.
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: "johndoe@example.com"
+        password:
+          type: string
+          example: "securepassword"
+responses:
+  200:
+    description: Login successful
+    schema:
+      type: object
+      properties:
+        success:
+          type: string
+          example: "Login success"
+        redirect:
+          type: string
+          example: "/coolbooks/homepage"
+  401:
+    description: Invalid password
+    schema:
+      type: object
+      properties:
+        Error:
+          type: string
+          example: "Invalid password"
+  404:
+    description: User not found
+    schema:
+      type: object
+      properties:
+        Error:
+          type: string
+          example: "User not found"
+  400:
+    description: Missing email
+    schema:
+      type: object
+      properties:
+        Error:
+          type: string
+          example: "Email is missing"
+    """
+
     from api.v1.app import auth
     if request.method == 'POST':
         data = request.get_json()
@@ -57,7 +183,60 @@ def get_login():
 
 @app_views.route('/forgot_pwd', strict_slashes=False, methods=['GET', 'POST'])
 def forgot_password():
-    """Allows user to request password reset"""
+    """
+Request password reset
+---
+tags:
+  - users
+summary: Send a password reset email
+description: Sends a reset link to the provided email address.
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          example: "user@example.com"
+responses:
+  200:
+    description: Reset link sent successfully
+    schema:
+      type: object
+      properties:
+        success:
+          type: string
+          example: "reset link sent successfully"
+  400:
+    description: Missing email
+    schema:
+      type: object
+      properties:
+        Error:
+          type: string
+          example: "Email is missing"
+  404:
+    description: User not found
+    schema:
+      type: object
+      properties:
+        Error:
+          type: string
+          example: "User not found"
+  500:
+    description: Token generation or mail sending failed
+    schema:
+      type: object
+      properties:
+        Error:
+          type: string
+          example: "Error sending reset link"
+    """
+
     from flask_mail import Message
     import os
     from datetime import datetime, timedelta
@@ -116,7 +295,48 @@ def forgot_password():
 
 @app_views.route('/logout', strict_slashes=False, methods=['GET'])
 def logout():
-    """handles logout"""
+    """
+Logs out the current user
+---
+tags:
+  - users
+summary: Logs out the currently authenticated user
+description: Destroys the session of the authenticated user and logs them out.
+parameters:
+  - name: session_id
+    in: cookie
+    description: The session ID of the logged-in user
+    required: true
+    schema:
+      type: string
+      example: "abc123xyz456"
+  - name: Authorization
+    in: header
+    description: Bearer token for user authentication (optional)
+    required: false
+    schema:
+      type: string
+      example: "Bearer token_value"
+responses:
+  200:
+    description: Logout successful
+    content:
+      application/json:
+        schema:
+          type: object
+          example: {}
+  404:
+    description: Logout failed (session not found)
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            Error:
+              type: string
+              example: "Session not found"
+    """
+
     from api.v1.app import auth
     if not auth.destroy_session(request):
         abort(404)
@@ -125,7 +345,81 @@ def logout():
 
 @app_views.route('/reset_pwd', strict_slashes=False, methods=['POST'])
 def reset_pwd():
-    """handles reset password request"""
+    """
+Resets a user's password using a valid token
+---
+tags:
+  - users
+summary: Allows a user to reset their password using a valid JWT token.
+description: This endpoint requires a valid reset token and new password details to reset a user's password.
+parameters:
+  - name: token
+    in: query
+    required: true
+    description: JWT reset token sent to the user's email. It is used to authenticate the reset request.
+    schema:
+      type: string
+      example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVkX3Byb2ZpbGUiOiJqb2huZG9lQGV4YW1wbGUuY29tIn0.abc123xyz"
+  - name: new_password
+    in: query
+    required: true
+    description: The new password that the user wants to set.
+    schema:
+      type: string
+      example: "new_secure_password"
+  - name: new_password_confirm
+    in: query
+    required: true
+    description: Confirmation of the new password to ensure both fields match.
+    schema:
+      type: string
+      example: "new_secure_password"
+requestBody:
+  required: false
+responses:
+  200:
+    description: Password reset successful
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            success:
+              type: string
+              example: "Password reset successful"
+  400:
+    description: Invalid input or token errors
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            Error:
+              type: string
+              example: "Passwords do not match"
+  404:
+    description: User not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            Error:
+              type: string
+              example: "User not found"
+  500:
+    description: Error processing the password reset
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            Error:
+              type: string
+              example: "Token has expired"
+    """
+    # Your actual code here...
+
     import bcrypt
     token = request.json.get('token')
     if token is None:
@@ -154,7 +448,39 @@ def reset_pwd():
 
 @app_views.route('/all_books', strict_slashes=False, methods=['GET'])
 def get_allbooks():
-    """displays all books"""
+    """
+Retrieves and returns a list of all books
+---
+tags:
+  - books
+summary: Display all available books
+responses:
+  200:
+    description: A list of all books with their titles and cover image URLs
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+                example: "The Great Gatsby"
+              cover:
+                type: string
+                example: "https://yourdomain.com/static/uploads/great_gatsby.jpg"
+  500:
+    description: Internal server error
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            Error:
+              type: string
+              example: "Internal server error"
+    """
     books = Books.all()
     all_books = [{
         'title': book.title,
@@ -163,9 +489,42 @@ def get_allbooks():
 
     return jsonify(all_books)
 
+
 @app_views.route('/reset', strict_slashes=False, methods=['GET'])
 def reset_to_html():
-    """Redirects to the HTML page with the token"""
+    """
+Redirects to the HTML page with the token
+---
+tags:
+  - users
+summary: Redirect to the password reset HTML page with a token
+parameters:
+  - name: token
+    in: query
+    description: The token to validate the password reset request
+    required: true
+    schema:
+      type: string
+      example: "abcd1234efgh5678"
+responses:
+  200:
+    description: Password reset HTML page with the provided token
+    content:
+      text/html:
+        schema:
+          type: string
+          example: "<html>...</html>"
+  400:
+    description: Invalid token or missing token
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            Error:
+              type: string
+              example: "Invalid token"
+    """
     token = request.args.get('token')
     
     if token is None:
@@ -173,6 +532,7 @@ def reset_to_html():
     
     # Render the reset.html page and pass the token to it
     return render_template("reset.html", token=token)
+
 
 @app_views.route('/', strict_slashes=False, methods=['GET'])
 def landing():

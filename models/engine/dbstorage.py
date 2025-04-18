@@ -18,19 +18,21 @@ from models.book import Books
 load_dotenv()
 
 classes = {"User": User,  "Books": Books}
-DB_USER = os.getenv('DB_USER')
-DB_USER_PWD = os.getenv('DB_USER_PWD')
-DB_ENGINE = os.getenv('DB_ENGINE')
-DB_HOST = os.getenv('DB_HOST')
-DB_PORT = os.getenv('DB_PORT')
 
 class DbStorage:
     """db engine"""
     __engine = __session = None
 
     def __init__(self) -> None:
-        DATABASE_URL = f'mysql+mysqldb://{DB_USER}:{DB_USER_PWD}@{DB_HOST}:{DB_PORT}/{DB_ENGINE}'
-        self.__engine = create_engine(DATABASE_URL, pool_pre_ping=True, pool_size=10, max_overflow=20, pool_timeout=30, echo=False)
+        DATABASE_URL = os.getenv('DATABASE_URL')
+        self.__engine = create_engine(
+            DATABASE_URL,
+            pool_pre_ping=True,
+            pool_size=10,
+            max_overflow=20,
+            pool_timeout=30,
+            echo=False
+        )
 
     def save(self, obj):
         """save obj to session"""

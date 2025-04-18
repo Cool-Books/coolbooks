@@ -1,3 +1,47 @@
-cool/
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Environment
 .env
-*.json
+*.env
+.venv/
+venv/
+ENV/
+env/
+*.sqlite3
+
+# Bytecode and logs
+*.log
+*.pot
+*.pyc
+*.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Pipenv
+Pipfile.lock
+
+# Pytest
+.cache/
+.pytest_cache/
+
+# Build / Dist
+build/
+dist/
+*.egg-info/
+
+
+# Database dump files (if any)
+*.sql
+cool/

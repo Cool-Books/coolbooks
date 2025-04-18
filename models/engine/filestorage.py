@@ -29,17 +29,19 @@ class FileStorage:
             
     
     def to_json(self, obj, for_serialization: bool = False) -> dict:
-        """converting the instance object to json"""
+        """Convert the instance object to JSON-safe dictionary"""
         result = {}
         for key, value in obj.__dict__.items():
+            if key == '_sa_instance_state':
+                continue  # skip SQLAlchemy internal state
             if not for_serialization and key == '_password':
                 continue
-            if type(value) is datetime:
+            if isinstance(value, datetime):
                 result[key] = datetime.strftime(value, TIMESTAMP)
             else:
                 result[key] = value
         return result
-    
+
 
     def save(self, obj=None):
         """save the instance of the obj to memory"""
@@ -49,21 +51,27 @@ class FileStorage:
         self.save_to_file(t_class)
 
     def save_to_file(self, t_class):
-        """saving to file"""
+        """Saving to file"""
         file_path = ".db_{}.json".format(t_class)
-        t_obj = {}
         t_obj = {key: self.to_json(val, True) for key, val in DATA[t_class].items()}
 
+        if not t_obj:
+            return  # Don't write empty dicts
 
-        with open(file_path, 'w') as f:
+        with open(file_path, 'a+') as f:
             f.seek(0, os.SEEK_END)
             if f.tell() > 0:
-                f.seek(f.tell() - 1, os.SEEK_SET)
+                f.seek(f.tell() - 1)
                 if f.read(1) != '\n':
                     f.write('\n')
 
             json.dump(t_obj, f)
             f.write('\n')
+
+        DATA[t_class] = {}
+
+
+
     
     def load_from_file(self, cls):
         """ Load all objects from file
@@ -141,11 +149,16 @@ class FileStorage:
         self.save(obj)
     
     def delete_all(self, cls):
-        """deletes all instances from the file storage"""
+        """Deletes all instances from the file storage and clears the file"""
         t_class = cls.__name__
         if t_class in DATA:
             DATA[t_class] = {}
-        self.save_to_file(t_class)
+
+        # Overwrite the file with an empty JSON object
+        file_path = f".db_{t_class}.json"
+        with open(file_path, 'w') as f:  # 'w' mode truncates the file
+            f.write("{}")  # Or json.dump({}, f) if you want an empty JSON object
+
     
     def close(self):
         """writes all obj to file"""

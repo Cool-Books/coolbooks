@@ -45,3 +45,10 @@ dist/
 # Database dump files (if any)
 *.sql
 cool/
+#database
+*.json
+#test
+*.rest
+test/
+test.py
+tst.py

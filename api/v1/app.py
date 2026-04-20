@@ -78,7 +78,8 @@ def check_auth():
         # add these lines to let swagger through
         '/apidocs/',            # the UI
         '/apispec_1.json*',      # the JSON spec
-        '/flasgger_static*'     # any swagger‐static assets
+        '/flasgger_static*',     # any swagger‐static assets
+        '/coolbooks/static/*'
     ]
     if not auth or not auth.require_auth(request.path, exc_path):
         return

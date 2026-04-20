@@ -39,7 +39,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# -- Register your existing blueprint --
+# -- Register your  existing blueprint --
 app.register_blueprint(app_views)
 
 # -- CORS, Mail, Sessions, etc. (unchanged) --
